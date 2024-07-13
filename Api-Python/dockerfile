@@ -1,11 +1,18 @@
+#Descargamos una imagen con python con una versión compatible con nuestro software
 FROM python:3.12-alpine3.17
 
+#Definiomos el working Directory en la imagen
 WORKDIR /app
 
+#Copyamos la lista de requerimientos, librerias python
 COPY requirements.txt requirements.txt
 
+#Corremos la instalación con pip
 RUN pip install -r requirements.txt
 
+#Copiamos toda la carpeta actual dentro del working directory
 COPY . .
 
+#Corremos el siguiente comando para que nuestro código quede a la escucha en el puerto 5000
+#Al utilizar CMD devemos manterner la siguiente estructura [ "", "", "" ]
 CMD [ "python", "-m", "flask", "run", "--host=0.0.0.0" ]
