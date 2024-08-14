@@ -1,0 +1,3 @@
+#Descargamos una imagen con ansible-lint 
+FROM pipelinecomponents/ansible-lint:latest
+
