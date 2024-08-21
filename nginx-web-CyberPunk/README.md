@@ -16,9 +16,13 @@ I make this site with old tecnologi, it's a static web site implementation:
 ```
 FROM nginx:latest
 
+# Delete oll conent
+RUN rm -r /usr/share/nginx/html/*
+
 # Path: /usr/share/nginx/html
 COPY /sitio /usr/share/nginx/html  
 
 ```
  The first line download the latest images of nginx from docker.hub.
- The second line copy web site into root nginx fordefault path.
+ The second line exect a comand to delete all html page for default.
+ The third line copy web site into root nginx fordefault path.
