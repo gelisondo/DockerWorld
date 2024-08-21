@@ -24,5 +24,5 @@ COPY /sitio /usr/share/nginx/html
 
 ```
  The first line download the latest images of nginx from docker.hub.
- The second line exect a comand to delete all html page for default.
+ The second line exec a comand to delete all html page for default.
  The third line copy web site into root nginx fordefault path.
