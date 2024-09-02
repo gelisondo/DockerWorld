@@ -10,22 +10,36 @@ echo "##########################################################################
 sleep 2
 
 #Var declaration:
-#Method accept two value: var or git
+#Method accept two value: VAR-M or GIT-M
 #For default we use var.
-TAGNAMEMETHOD="var"
+TAGNAMEMETHOD="GIT-M"
 
-if ( $TAGNAMEMETHOD == "git" );
+if [ $TAGNAMEMETHOD == "GIT-M" ];
 then
 
     #Seteo de NAMEVERSION y de TAGVERSION solapando el nombre del proyecto git y el tag
-    $NAMEVERSION=`git remote get-url  origin | cut -d "/" -f 2 | cut -d "." -f 1`;
-    $TAGVERSION=`git tag | tail  -n 1`;
+    NAMEVERSION=`git remote get-url  origin | cut -d "/" -f 2 | cut -d "." -f 1 | tr '[:upper:]' '[:lower:]'`;
+    echo $NAMEVERSION
+    sleep 1
+    #Obtenemos el ultimo tag asignado.
+    #Si no tiene ningúno asignado devemos asignarle uno, trancar el proceso
+    #-indicando que se debe asignar primero un tag en git del proyecto.
+    TAGVERSION=`git tag | tail  -n 1`;
+    echo $TAGVERSION
+    sleep 1
+    if [ -z $TAGVERSION ];
+    then 
+        echo "Dont exist a tag in this git project"
+        echo "Define tag first to continue"
+        exit 0
+    fi
 
-elif ( $TAGNAMEMETHOD == "var" );
+elif [ $TAGNAMEMETHOD == "VAR-M" ];
+then
 
     #Name and version, Seteado por el programador, esto se utilizara si el usuario no pasa como argumento el nombre y el tag de conteiner
-    $NAMEVERSION="wwcpunk"
-    $TAGVERSION="0.1"
+    NAMEVERSION="wwcpunk"
+    TAGVERSION="0.1"
 
 else
 
@@ -54,7 +68,6 @@ fi
 #VERIFICAMOS QUE EXISTAN ARGUMENTOS SI NO ES ASÍ UTILIZAREMOS NOMBRES POR DEFECTO.
 if [ -z $($1) ];
 then
-    echo "is unset or set to the empty string"
     #Set default value
     IMAGENAME=$NAMEVERSION
 else
@@ -65,7 +78,6 @@ fi
 #Verify the second arguments, or set default name
 if [ -z $($2) ];
 then
-    echo "is unset or set to the empty string"
     #Set default value
     IMAGENAME=$TAGVERSION
 else
