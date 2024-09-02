@@ -19,7 +19,7 @@ then
 
     #Seteo de NAMEVERSION y de TAGVERSION solapando el nombre del proyecto git y el tag
     $NAMEVERSION=`git remote get-url  origin | cut -d "/" -f 2 | cut -d "." -f 1`;
-    $TAGVERSION=``;
+    $TAGVERSION=`git tag | tail  -n 1`;
 
 elif ( $TAGNAMEMETHOD == "var" );
 
