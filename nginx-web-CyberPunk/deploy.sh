@@ -9,14 +9,45 @@ echo "# Example: ./deploy imagename tagname 8083                                
 echo "##############################################################################################################"
 sleep 2
 
+#Var declaration:
+#Method accept two value: var or git
+#For default we use var.
+TAGNAMEMETHOD="var"
 
-UID=`id -u`
-
-if [ $UID -nq 0 ];
+if ( $TAGNAMEMETHOD == "git" );
 then
-    echo "You need root privileges to run this script"
-    sleep 2
+
+    #Seteo de NAMEVERSION y de TAGVERSION solapando el nombre del proyecto git y el tag
+    $NAMEVERSION=`git remote get-url  origin | cut -d "/" -f 2 | cut -d "." -f 1`;
+    $TAGVERSION=``;
+
+elif ( $TAGNAMEMETHOD == "var" );
+
+    #Name and version, Seteado por el programador, esto se utilizara si el usuario no pasa como argumento el nombre y el tag de conteiner
+    $NAMEVERSION="wwcpunk"
+    $TAGVERSION="0.1"
+
+else
+
+    echo "Method accept two value: var or git"
+    sleep 3 
     exit 0
+fi
+
+IDUSER=`id -u`
+if [ $IDUSER -ne 0 ];
+then
+    
+    if grep docker:x: /etc/group | grep -q $USER
+    then 
+        echo "El usuario $USER es parte del grup docker"
+        sleep 3
+    else
+        echo "You need to be part of docker group or you are root to run this script"
+        sleep 2
+        exit 0 
+    fi
+
 fi
 
 
@@ -25,7 +56,7 @@ if [ -z $($1) ];
 then
     echo "is unset or set to the empty string"
     #Set default value
-    IMAGENAME="wcpunk"
+    IMAGENAME=$NAMEVERSION
 else
     echo "Set name with argument, $1"
     IMAGENAME="$1"
@@ -36,7 +67,7 @@ if [ -z $($2) ];
 then
     echo "is unset or set to the empty string"
     #Set default value
-    IMAGENAME="1.0"
+    IMAGENAME=$TAGVERSION
 else
     echo "Set name with argument, $2"
     IMAGENAME="$2"
